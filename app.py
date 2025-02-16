@@ -72,7 +72,11 @@ def process_images():
     }), 200
 
 if __name__ == '__main__':
-    # For local testing
-    print("Flask app is starting...")
+    # Get the assigned port from Railway, default to 5000 if not set
+    port = int(os.environ.get("PORT", 5000))
 
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    # Print statement for debugging (optional)
+    print(f"🚀 Flask app starting on port {port}...")
+
+    # Run Flask with the dynamically assigned port
+    app.run(host='0.0.0.0', port=port)
