@@ -7,6 +7,13 @@ from rembg import remove
 import os
 
 app = Flask(__name__)
+@app.route('/', methods=['GET'])
+def home():
+    return "Hello from the root route!"
+
+@app.route('/test-route', methods=['GET'])
+def test_route():
+    return "Test route is working!"
 
 # Endpoint to process images
 @app.route('/process-images', methods=['POST'])
