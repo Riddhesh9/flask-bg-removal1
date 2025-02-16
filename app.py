@@ -4,6 +4,7 @@ from io import BytesIO
 from flask import Flask, request, jsonify
 import requests
 from rembg import remove
+import os
 
 app = Flask(__name__)
 
