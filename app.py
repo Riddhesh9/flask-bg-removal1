@@ -25,7 +25,7 @@ def process_images():
     
     for url in image_urls:
         try:
-            # Download image from URL (assumed public or with proper auth parameters)
+            # Download image from URL
             response = requests.get(url)
             if response.status_code != 200:
                 processed_images.append({
@@ -35,11 +35,14 @@ def process_images():
                 continue
 
             # Read image bytes and process background removal
-            input_image_bytes = BytesIO(response.content).read()
-            output_image_bytes = remove(input_image_bytes)
-            
-            # Encode processed image in base64 to send over JSON (you can adjust if needed)
-            processed_image_b64 = base64.b64encode(output_image_bytes).decode('utf-8')
+            input_image_bytes = BytesIO(response.content)
+            output_image_bytes = remove(input_image_bytes.read())
+
+            # Convert the output bytes back to an image file-like object
+            output_buffer = BytesIO(output_image_bytes)
+
+            # Encode processed image in base64
+            processed_image_b64 = base64.b64encode(output_buffer.getvalue()).decode('utf-8')
 
             processed_images.append({
                 'original_url': url,
@@ -55,7 +58,7 @@ def process_images():
     # (Replace the URL below with your actual n8n webhook/endpoint URL)
     n8n_endpoint = 'https://primary-production-7f6d.up.railway.app/webhook-test/0207105a-af75-4564-a6f1-ab2f166fd682'
     try:
-        n8n_response = requests.post(n8n_endpoint, json={'images': processed_images})
+        n8n_response = requests.post(n8n_endpoint, json={'images': processed_images}, headers={'Content-Type': 'application/json'})
         if n8n_response.status_code != 200:
             return jsonify({
                 'error': 'Failed to forward images to n8n. HTTP Status: {}'.format(n8n_response.status_code)
