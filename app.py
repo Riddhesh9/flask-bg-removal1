@@ -74,7 +74,7 @@ def process_images():
 
 if __name__ == '__main__':
     # Get the assigned port from Railway, default to 5000 if not set
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
 
     # Print statement for debugging (optional)
     print(f"🚀 Flask app starting on port {port}...")
